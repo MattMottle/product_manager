@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 
+
 const ProductForm = (props) => {
     const {products, setProducts} = props;
     const [title, setTitle] = useState("");
@@ -18,22 +19,26 @@ const ProductForm = (props) => {
                 console.log(res);
                 console.log(res.data);
                 setProducts([...products, res.data]);
+                setTitle("");
+                setPrice(0.00);
+                setDescription("");
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
+
     }
     return(
         <form onSubmit={onSubmitHandler}>
             <div>
                 <label>Title:</label>
-                <input type="text" onChange = {(event) => setTitle(event.target.value)}/>
+                <input type="text" onChange = {(event) => setTitle(event.target.value)} value={title}/>
             </div>
             <div>
                 <label>Price:</label>
-                <input type="number" step="0.01" onChange = {(event) => setPrice(event.target.value)}/>
+                <input type="number" step="0.01" onChange = {(event) => setPrice(event.target.value)} value={price}/>
             </div>
             <div>
                 <label>Description:</label>
-                <textarea id="description" onChange = {(event) => setDescription(event.target.value)}/>
+                <textarea id="description" onChange = {(event) => setDescription(event.target.value)} value={description}/>
             </div>
             <input type="submit"/>
         </form>
