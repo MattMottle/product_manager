@@ -1,46 +1,41 @@
-import React, {useState} from 'react';
-import axios from 'axios';
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProductForm = (props) => {
-    const {products, setProducts} = props;
-    const [title, setTitle] = useState("");
-    const [price, setPrice] = useState();
-    const [description, setDescription] = useState("");
-    
+    const { initialTitle, initialPrice, initialDescription, onSubmitProp } = props;
+    const [title, setTitle] = useState(initialTitle);
+    const [price, setPrice] = useState(initialPrice);
+    const [description, setDescription] = useState(initialDescription);
+    const navigate = useNavigate();
+
     const onSubmitHandler = (event) => {
         event.preventDefault();
-        axios.post('http://localhost:8000/api/products', {
+        onSubmitProp({
             title,
             price,
             description
         })
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-                setProducts([...products, res.data]);
-                setTitle("");
-                setPrice(0.00);
-                setDescription("");
-            })
-            .catch(err => console.log(err));
+        setTitle("")
+        setPrice("0.00")
+        setDescription("")
+        navigate("/products")
 
     }
-    return(
+    return (
         <form onSubmit={onSubmitHandler}>
             <div>
                 <label>Title:</label>
-                <input type="text" onChange = {(event) => setTitle(event.target.value)} value={title}/>
+                <input type="text" name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
             </div>
             <div>
                 <label>Price:</label>
-                <input type="number" step="0.01" onChange = {(event) => setPrice(event.target.value)} value={price}/>
+                <input type="number" step="0.01" name="price" value={price} onChange={(event) => setPrice(event.target.value)} />
             </div>
             <div>
                 <label>Description:</label>
-                <textarea id="description" onChange = {(event) => setDescription(event.target.value)} value={description}/>
+                <textarea type="text" name="description" value={description} onChange={(event) => setDescription(event.target.value)} />
             </div>
-            <input type="submit"/>
+            <input type="submit" />
         </form>
     )
 }
